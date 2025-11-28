@@ -1,3 +1,6 @@
+https://github.com/mariapnfv/sales-bonus
+https://mariapnfv.github.io/sales-bonus/
+
 # Проектная работа "Пряники"
 5 спринт, модуль JS
 
