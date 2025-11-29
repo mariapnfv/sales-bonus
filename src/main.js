@@ -114,9 +114,9 @@ function analyzeSalesData(data, options) {
       if (!seller.products_sold) {
         seller.products_sold = {};
       }
-      if (!seller.products_sold[item.sku]) {
-        seller.products_sold[item.sku] = 0;
-      }
+     // if (!seller.products_sold[item.sku]) {
+      //  seller.products_sold[item.sku] = 0;
+     // }
 
       // По артикулу товара увеличить его проданное количество у продавца
       seller.products_sold[item.sku]++;
