@@ -66,8 +66,8 @@ function analyzeSalesData(data, options) {
   const sellerStats = data.sellers.map(seller => ({
     // Заполним начальными данными
     id: seller.id,
-    name: `${seller.first_name} ${seller.last_name}`
-
+    name: `${seller.first_name} ${seller.last_name}`,
+    products_quantity: {}
   }));
  // console.log(sellerStats);
   // @TODO: Индексация продавцов и товаров для быстрого доступа
@@ -109,20 +109,15 @@ function analyzeSalesData(data, options) {
         seller.profit = 0;
       }
       seller.profit = seller.profit + profit;
-
-
      // console.log(seller.profit);
       // Учёт количества проданных товаров
       if (!seller.products_sold) {
         seller.products_sold = {};
       }
-      if (!seller.products_sold[item.sku]) {
-        seller.products_sold[item.sku] = 0;
-      }
-
-      // По артикулу товара увеличить его проданное количество у продавца
-      seller.products_sold[item.sku]++;
+            // По артикулу товара увеличить его проданное количество у продавца
+      seller.products_sold[item.sku] = (seller.products_sold[item.sku] || 0) + 1;
      // console.log(seller.products_sold);
+     seller.products_quantity[item.sku] = (seller.products_quantity[item.sku] || 0) + item.quantity;
     });
   });
   // @TODO: Сортировка продавцов по прибыли
@@ -130,11 +125,12 @@ function analyzeSalesData(data, options) {
 
   // @TODO: Назначение премий на основе ранжирования
   sellerStats.forEach((seller, index) => {
+   // console.log(seller.products_sold);
     seller.bonus = calculateBonusByProfit(index, sellerStats.length, seller)// Считаем бонус
-    seller.top_products = Object.entries(seller.products_sold)
-      .map(([sku, quantity]) => ({ sku, quantity }))
-      .sort((a, b) => b.quantity - a.quantity)
-      .slice(0, 10);// Формируем топ-10 товаров
+    seller.top_products =  Object.entries(seller.products_quantity)
+  .map(([sku, quantity]) => ({ sku, quantity }))
+  .sort((a, b) => b.quantity - a.quantity)
+  .slice(0, 10);// Формируем топ-10 товаров
     //console.log(seller.bonus);
     //console.log(seller.top_products);
   });
