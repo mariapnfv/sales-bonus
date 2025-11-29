@@ -43,9 +43,10 @@ function calculateBonusByProfit(index, total, seller) {
  * @param options
  * @returns {{revenue, top_products, bonus, name, sales_count, profit, seller_id}[]}
  */
-const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
+
 function analyzeSalesData(data, options) {
-    // @TODO: Проверка входных данных
+  
+  // @TODO: Проверка входных данных
   if (!data
     || !Array.isArray(data.sellers)
     || !Array.isArray(data.products)
@@ -87,8 +88,7 @@ function analyzeSalesData(data, options) {
     if (!seller.revenue) {
       seller.revenue = 0;
     }
-    //seller.revenue += record.total_amount;
-    seller.revenue = roundToTwoDecimals(seller.revenue + record.total_amount);
+    seller.revenue += record.total_amount;
     //console.log(seller);
 
     // Расчёт прибыли для каждого товара
@@ -108,8 +108,8 @@ function analyzeSalesData(data, options) {
       if (!seller.profit) {
         seller.profit = 0;
       }
-      //seller.profit = seller.profit + profit;
-      seller.profit = roundToTwoDecimals(seller.profit + profit); 
+      seller.profit = seller.profit + profit;
+
 
      // console.log(seller.profit);
       // Учёт количества проданных товаров
@@ -142,8 +142,8 @@ function analyzeSalesData(data, options) {
   return sellerStats.map(seller => ({
     seller_id: seller.id,// Строка, идентификатор продавца
     name: seller.name,// Строка, имя продавца
-    revenue: +seller.revenue,// Число с двумя знаками после точки, выручка продавца
-    profit: +seller.profit,// Число с двумя знаками после точки, прибыль продавца
+    revenue: +seller.revenue.toFixed(2),// Число с двумя знаками после точки, выручка продавца
+    profit: +seller.profit.toFixed(2),// Число с двумя знаками после точки, прибыль продавца
     sales_count: seller.sales_count,// Целое число, количество продаж продавца
     top_products: seller.top_products, // Массив объектов вида: { "sku": "SKU_008","quantity": 10}, топ-10 товаров продавца
     bonus: +seller.bonus.toFixed(2)// Число с двумя знаками после точки, бонус продавца
